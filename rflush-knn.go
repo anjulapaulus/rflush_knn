@@ -139,7 +139,7 @@ func BoxDistCalc(aMin, aMax, bMin, bMax [2]float64, wrapX bool) float64 {
 
 
 //distance provided in metres
-func distance(a [2]float64,b [2]float64, lat float64) float64{
+func Distance(a [2]float64,b [2]float64, lat float64) float64{
 	//latitude
 	//cos := math.Cos(a[0] * math.Pi / 180)
 	//cos2 := 2*cos*cos - 1
