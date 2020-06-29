@@ -1,4 +1,8 @@
-# RFlush KNN
+RFlush KNN
+==========
+[![Build Status](https://travis-ci.org/anjulapaulus/rflush_knn.svg?branch=master)](https://travis-ci.com/anjulapaulus/rflush_knn)
+[![codecov](https://codecov.io/gh/anjulapaulus/rflush_knn/branch/master/graph/badge.svg)](https://codecov.io/gh/anjulapaulus/rflush_knn)
+
 K-nearest neighbors search (KNN) for RFlush
 
 ### Install
