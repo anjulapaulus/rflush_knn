@@ -38,7 +38,6 @@ func (a qnode) Compare (b tinyqueue.Item) bool{
 // called by the caller to "return" the data item along with a distance.
 // The `iter` function will return all items from the smallest dist to the
 // largest dist.
-// Take a look at the SimpleBoxAlgo function for a usage example.
 func (index *Index) Nearby(
 	algo func(min, max [2]float64, reference string,data interface{}, item bool) (dist float64),
 	iter func(min, max [2]float64, reference string, data interface{}, dist float64) bool,
@@ -78,19 +77,19 @@ func (index *Index) Nearby(
 }
 
 
-// Box performs simple box-distance algorithm on rectangles. When wrapX
-// is provided, the operation does a cylinder wrapping of the X value to allow
-// for antimeridian calculations. When itemDist is provided (not nil), it
-// becomes the caller's responsibility to return the box-distance.
+// Box performs simple box-distance algorithm on rectangles.
+// When wrapX is provided, the operation does a cylinder wrapping of the X value to allow
+// for anti-meridian calculations.
+// When itemDist is provided (not nil), it becomes the caller's responsibility to return the box-distance.
 func Box(
 	targetMin, targetMax [2]float64, wrapX bool,
-	itemDist func(min, max [2]float64, reference string, data interface{}) float64,
+	itemDist func(min, max [2]float64, data interface{}) float64,
 ) (
-	algo func(min, max [2]float64, reference string, data interface{}, item bool) (dist float64),
+	algo func(min, max [2]float64, data interface{}, item bool) (dist float64),
 ) {
-	return func(min, max [2]float64, reference string, data interface{}, item bool) (dist float64) {
+	return func(min, max [2]float64, data interface{}, item bool) (dist float64) {
 		if item && itemDist != nil {
-			return itemDist(min, max, reference, data)
+			return itemDist(min, max, data)
 		}
 		return BoxDistCalc(targetMin, targetMax, min, max, wrapX)
 	}
@@ -110,8 +109,8 @@ func mmax(x, y float64) float64 {
 	return y
 }
 
-// BoxDistCalc returns the distance from rectangle A to rectangle B. When wrapX
-// is provided, the operation does a cylinder wrapping of the X value to allow
+// BoxDistCalc returns the distance from rectangle A to rectangle B.
+// When wrapX is provided, the operation does a cylinder wrapping of the X value to allow
 // for anti-meridian calculations.
 func BoxDistCalc(aMin, aMax, bMin, bMax [2]float64, wrapX bool) float64 {
 	var dist float64
@@ -137,8 +136,8 @@ func BoxDistCalc(aMin, aMax, bMin, bMax [2]float64, wrapX bool) float64 {
 	return dist
 }
 
-
-//distance provided in metres
+// Given two points of the form [longitude, latitude], returns the distance.
+// distance provided in metres
 func Distance(a [2]float64,b [2]float64, lat float64) float64{
 	//latitude
 	//cos := math.Cos(a[0] * math.Pi / 180)
@@ -153,6 +152,7 @@ func Distance(a [2]float64,b [2]float64, lat float64) float64{
 	//dy := (a[1] - b[1]) * Ky
 	//return math.Sqrt(dx*dx + dy*dy)
 
+	//Creates a ruler instance for very fast approximations to common geodesic measurements around a certain latitude.
 	coslat := math.Cos(lat * RAD)
 	w2 := 1 / (1 - E2 * (1 - coslat * coslat))
 	w := math.Sqrt(w2)

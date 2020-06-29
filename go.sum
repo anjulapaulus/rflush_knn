@@ -1,0 +1,5 @@
+github.com/anjulapaulus/rflush v0.0.0-20200629050437-10c12370c10e h1:p3M2/xwRON0g+XRqA75wslxn+mudfsQBY2fZa2lkTWw=
+github.com/anjulapaulus/rflush v0.0.0-20200629050437-10c12370c10e/go.mod h1:V2w+RfTmQpgQNGgPCMdVpiyIznTFJsaSp41qKAgnQVo=
+github.com/anjulapaulus/tinyqueue v1.0.0 h1:dYenCwbbHeXaX1gCESQD97IB0gYOTzlEyqCgI6ofvrs=
+github.com/anjulapaulus/tinyqueue v1.0.0/go.mod h1:sGHqc3nnrmLUOLL7eko5yTKiZanF2jS6ZNYBC1IlFiE=
+github.com/tidwall/lotsa v1.0.1/go.mod h1:X6NiU+4yHA3fE3Puvpnn1XMDrFZrE9JO2/w+UMuqgR8=
