@@ -1,9 +1,7 @@
 package rflush_knn
 
 import (
-	"fmt"
 	"github.com/anjulapaulus/rflush"
-	"github.com/anjulapaulus/rflush_knn"
 	"math"
 	"math/rand"
 	"testing"
@@ -103,16 +101,74 @@ func TestBoxDistCalc(t *testing.T) {
 func TestIndex_Nearby(t *testing.T) {
 	var tr rflush.RTree
 
-	bbox := rflush.PointToBBox([2]float64{6.967660, 79.872217},0.1)
+	tbox:= randBoxes(1000)
+	//bbox := rflush.PointToBBox([2]float64{6.967660, 79.872217},0.1)
 
 	indexer := Wrap(tr)
 
-	indexer.Nearby(Box(bbox.Min, bbox.Max, false, nil),
-		func(min, max [2]float64, value interface{}, dist float64) bool {
-			dista := Distance([2]float64{6.971322, 79.874468},min,min[0])
-			if dista >= 300 {
-				fmt.Println(dista)
-			}
-			return true
-		},)
+	for k:=0; k<1000;k++{
+		indexer.rtree.Insert(tbox[k].min, tbox[k].max,tbox[k])
+	}
+
+	var distBox []float64
+		indexer.Nearby(Box(tbox[100].min, tbox[100].max, false, nil),
+			func(min, max [2]float64, value interface{}, dist float64) bool {
+				dista := Distance([2]float64{6.971322, 79.874468}, min, min[0])
+				if dista >= 5000{
+					distBox = append(distBox, dista)
+				}
+				return true
+			}, )
+
+	if len(distBox) != 1000{
+		t.Error("Nearby Function Failed", len(distBox))
+	}
+
+}
+
+
+func BenchmarkIndex_Nearby(b *testing.B) {
+	var tr rflush.RTree
+
+	tbox:= randBoxes(b.N)
+	//bbox := rflush.PointToBBox([2]float64{6.967660, 79.872217},0.1)
+
+	indexer := Wrap(tr)
+
+	//for k:=0; k<b.N;k++{
+	//	indexer.rtree.Insert(tbox[k].min, tbox[k].max,tbox[k])
+	//}
+	b.ResetTimer()
+	//var distBox []float64
+
+	for i:=0; i< b.N; i++ {
+		indexer.Nearby(Box(tbox[i].min, tbox[i].max, false, nil),
+			func(min, max [2]float64, value interface{}, dist float64) bool {
+				//dista := Distance([2]float64{6.971322, 79.874468}, min, min[0])
+				//if dista >= 5000 {
+				//	distBox = append(distBox, dista)
+				//}
+
+				return true
+			}, )
+	}
+
+}
+
+func BenchmarkDistance(b *testing.B) {
+	tbox:= randBoxes(b.N)
+
+	for i:=0; i<b.N; i++ {
+		Distance([2]float64{6.887826, 79.883665},tbox[i].min,6.887826)
+	}
+}
+
+func BenchmarkBoxDistCalc(b *testing.B) {
+	tbox:= randBoxes(b.N)
+
+	testBBox := rflush.PointToBBox([2]float64{6.887826, 79.883665},0.1)
+	for i:=0; i<b.N; i++ {
+		BoxDistCalc(testBBox.Min,testBBox.Max,tbox[i].min,tbox[i].max,false)
+
+	}
 }

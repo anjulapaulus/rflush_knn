@@ -39,8 +39,8 @@ func (a qnode) Compare (b tinyqueue.Item) bool{
 // The `iter` function will return all items from the smallest dist to the
 // largest dist.
 func (index *Index) Nearby(
-	algo func(min, max [2]float64, reference string,data interface{}, item bool) (dist float64),
-	iter func(min, max [2]float64, reference string, data interface{}, dist float64) bool,
+	algo func(min, max [2]float64, data interface{}, item bool) (dist float64),
+	iter func(min, max [2]float64, data interface{}, dist float64) bool,
 ) {
 	var q tinyqueue.Queue
 	var parent interface{}
@@ -51,7 +51,7 @@ func (index *Index) Nearby(
 		children = index.rtree.Children(parent, children[:0])
 		for _, child := range children {
 			q.Push(qnode{
-				dist:  algo(child.Min, child.Max,child.Reference, child.Data, child.Item),
+				dist:  algo(child.Min, child.Max,child.Data, child.Item),
 				child: child,
 			})
 		}
@@ -63,7 +63,7 @@ func (index *Index) Nearby(
 			}
 			node := item.(qnode)
 			if node.child.Item {
-				if !iter(node.child.Min, node.child.Max, node.child.Reference,
+				if !iter(node.child.Min, node.child.Max,
 					node.child.Data, node.dist) {
 					return
 				}
