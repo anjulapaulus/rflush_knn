@@ -26,3 +26,16 @@ indexer.Nearby(rflush_knn.Box(bbox.Min, bbox.Max, false, nil),
 	},)
 
 ````
+### Perfomance 
+The benchmarks were conducted on a Macbook Pro 2019 RAM 8GB Mac Os Catalina
+
+````
+goos: darwin
+goarch: amd64
+pkg: github.com/anjulapaulus/rflush_knn
+BenchmarkIndex_Nearby-8         20000000                60.2 ns/op
+BenchmarkDistance-8             20000000               108 ns/op
+BenchmarkBoxDistCalc-8          20000000                93.8 ns/op
+PASS
+ok      github.com/anjulapaulus/rflush_knn      8.094s
+````
