@@ -20,4 +20,5 @@ indexer.Nearby(rflush_knn.Box(bbox.Min, bbox.Max, false, nil),
 		}
 		return true
 	},)
+
 ````
