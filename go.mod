@@ -1,4 +1,4 @@
-module rflush_knn
+module github.com/anjulapaulus/rflush_knn
 
 go 1.12
 
